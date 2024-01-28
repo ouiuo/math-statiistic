@@ -51,3 +51,9 @@ coverage.xml
 
 # Sphinx documentation
 docs/_build/
+/lab1/myimage.png
+/.idea/math-statiistic.iml
+/.idea/.gitignore
+
+.idea/*
+.idea

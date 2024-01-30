@@ -30,7 +30,10 @@ def generate_random_data(config):
     random_config = config.random_config
     rand_values = []
     for i in range(random_config.count):
-        rand_values.append(round(random.uniform(random_config.min, random_config.max), random_config.scale))
+        rand_v = round(random.uniform(random_config.min, random_config.max), random_config.scale)
+        rand_v += round(random.uniform(random_config.min, random_config.max), random_config.scale)
+
+        rand_values.append(rand_v)
 
     with open('random_data.csv', 'w', newline='') as outfile:
         writer = csv.writer(outfile, delimiter='\n')
@@ -47,3 +50,9 @@ def get_data(config):
     else:
         print('Read value from file')
         return read_data(config)
+
+def store_data(data, f_name):
+    with open(f_name, 'w', newline='') as outfile:
+        writer = csv.writer(outfile, delimiter='\n')
+        writer.writerow(data)
+        outfile.close()

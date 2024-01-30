@@ -1,4 +1,29 @@
+from scipy.special import erf
 import math as mt
+
+
+def laplas_f(x, scale=4):
+    Phi = lambda t: (erf(t / 2 ** 0.5) / 2)
+
+    return Phi(x)
+
+
+def calculate_a(data, expected, dispersion):
+    a = 0.0
+    for i in data:
+        a += pow(i - expected, 3)
+    a = a / ((len(data) - 1.0) * pow(dispersion, 3.0 / 2))
+
+    return a
+
+
+def calculate_e(data, expected, dispersion):
+    e = 0.0
+    for i in data:
+        e += pow(i - expected, 4)
+    e = e / ((len(data) - 1) * pow(dispersion, 4.0 / 2)) - 3
+
+    return e
 
 
 def calculate_statistic_function(normilize_el, dx):
@@ -11,6 +36,24 @@ def calculate_statistic_function(normilize_el, dx):
         if i == len(normilize_el):
             y[i] = round(y[i])
     return x, y
+
+
+def calculate_theoretical_probability(data, dx, n, expected, dispersion):
+    min_el, max_el = min(data), max(data)
+    det = pow(dispersion, 1 / 2)
+    theoretical_probability = list()
+    x = min_el
+    for i in range(n):
+        left = x
+        right = x + dx
+        if i == (n - 1):
+            theoretical_probability.append(laplas_f((max_el - expected) / det) - laplas_f((left - expected) / det))
+        else:
+            theoretical_probability.append(laplas_f((right - expected) / det) - laplas_f((left - expected) / det))
+
+        x += dx
+
+    return theoretical_probability
 
 
 def calculate_empheric_rule(data, dx, n):
